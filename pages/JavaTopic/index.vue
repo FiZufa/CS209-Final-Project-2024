@@ -4,7 +4,7 @@
     <h1>Most Frequently Asked Topics</h1>
 
     <div class="chart-container">
-        <MyChart />
+      <MyChart :chartData="chartData" :chartLabels="chartLabels" />
     </div>
 
     <div class="input-container">
@@ -24,19 +24,38 @@
 <script>
 import AppHeader from '@/components/AppHeader.vue';
 import MyChart from '@/components/MyChart.vue';
+import axios from 'axios';
 
 export default {
-    name: 'JavaTopic'
-};
-
-const chartType = ref('bar'); // Default chart type
-const chartData = ref([
-  {
-    label: 'Sample Data',
-    data: [10, 20, 30, 40],
-    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+  name: 'JavaTopic',
+  components: {
+    AppHeader,
+    MyChart,
   },
-]);
+  data() {
+    return {
+      chartLabels: [], // Labels for the chart
+      chartData: [], // Data points for the chart
+    };
+  },
+  mounted() {
+    this.fetchTopTags();
+  },
+  methods: {
+    async fetchTopTags() {
+      try {
+        const response = await axios.get('http://10.15.165.194:8080/api/v1/questions/top-tags/10');
+        const tags = response.data;
+
+        // Map the JSON data to labels and data arrays
+        this.chartLabels = tags.map(tag => tag.name); // ['jsp', 'jstl', 'swing', ...]
+        this.chartData = tags.map(tag => tag.totalEngagement); // [7994096, 2284544, ...]
+      } catch (error) {
+        console.error('Error fetching top tags:', error);
+      }
+    },
+  },
+};
 
 const analyzeData = () => {
   if (dataNumber.value && dataNumber.value > 0) {

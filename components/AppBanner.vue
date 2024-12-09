@@ -1,7 +1,7 @@
 <template>
     <div class="banner">
         <div class="headline">
-            <h1>Unlock Insights from Stack Overflow Data</h1>
+            <h1>Unlock Insights from <span class="stack">Stack</span><span class="overflow">overflow</span> Data</h1>
         </div>
 
         <div class="menus">
@@ -88,6 +88,18 @@ button {
 
 button:hover {
     background-color: rgba(255, 255, 255, 1);    /* Solid background on hover */
+}
+
+.stack {
+  font-weight: normal;
+  color: #2C2D2D;
+  text-shadow: 2px 2px 4px rgba(204, 204, 204, 0.5);
+}
+
+.overflow {
+  font-weight: bold;
+  color: #2C2D2D;
+  text-shadow: 2px 2px 4px rgba(204, 204, 204, 0.5);
 }
 
 
