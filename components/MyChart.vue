@@ -43,6 +43,8 @@ watch([props.chartLabels, props.chartData], () => {
     backgroundColors = generateColors(props.chartData.length); // Generate new colors
     chartInstance.data.datasets[0].backgroundColor = backgroundColors;
     chartInstance.update();
+    console.log(props.chartData)
+    console.log(props.chartLabels)
   }
 });
 
