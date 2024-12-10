@@ -42,21 +42,29 @@ export default {
     this.fetchTopTags();
   },
   methods: {
-    async fetchTopTags() {
-      try {
-        const response = await axios.get('http://10.26.111.240:8080/api/v1/questions/top-tags/10');
-        const tags = response.data;
+  async fetchTopTags() {
+    try {
+      const response = await axios.get('http://35.240.167.146:16800/api/v1/questions/top-tags/10');
+      const tags = response.data;
 
-        console.log(tags)
+      if (tags && tags.length) { // Ensure tags are valid
+        console.log('Fetched tags:', tags);
 
-        // Map the JSON data to labels and data arrays
-        this.chartLabels = tags.map(tag => tag.name); // ['jsp', 'jstl', 'swing', ...]
-        this.chartData = tags.map(tag => tag.frequency); // [7994096, 2284544, ...]
-      } catch (error) {
-        console.error('Error fetching top tags:', error);
+        this.chartLabels = tags.map(tag => tag.name);
+        this.chartData = tags.map(tag => tag.frequency);
+      } else {
+        console.warn('No tags returned from API.');
+        this.chartLabels = [];
+        this.chartData = [];
       }
-    },
+    } catch (error) {
+      console.error('Error fetching top tags:', error);
+      this.chartLabels = [];
+      this.chartData = [];
+    }
   },
+},
+
 };
 
 // const analyzeData = () => {

@@ -1,9 +1,9 @@
 <template>
-    <div class="canvas-wrapper">
-      <canvas ref="chartCanvas"></canvas>
-    </div>
+  <div class="canvas-wrapper">
+    <canvas ref="chartCanvas"></canvas>
+  </div>
 </template>
-  
+
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { Chart, registerables } from 'chart.js';
@@ -31,63 +31,81 @@ const generateColors = (count) => {
   );
 };
 
-// Reactive variable for colors
+// Initialize colors
 let backgroundColors = generateColors(props.chartData.length);
 
-// Watch for updates in props to re-render the chart
-watch([props.chartLabels, props.chartData], () => {
-  if (chartInstance) {
-    // Update the chart when props change
-    chartInstance.data.labels = props.chartLabels;
-    chartInstance.data.datasets[0].data = props.chartData;
-    backgroundColors = generateColors(props.chartData.length); // Generate new colors
-    chartInstance.data.datasets[0].backgroundColor = backgroundColors;
-    chartInstance.update();
-    console.log(props.chartData)
-    console.log(props.chartLabels)
+const initializeChart = () => {
+  if (!chartCanvas.value || !props.chartLabels.length || !props.chartData.length) {
+    console.warn('Cannot initialize chart: Missing canvas or props.');
+    return;
   }
-});
 
-onMounted(() => {
-  // Initialize the chart when the component is mounted
+  if (chartInstance) {
+    console.log('Destroying existing chart.');
+    chartInstance.destroy();
+  }
+
   chartInstance = new Chart(chartCanvas.value, {
-    type: 'bar', // Choose the chart type
+    type: 'bar',
     data: {
       labels: props.chartLabels,
       datasets: [
         {
           label: 'Total Engagement',
           data: props.chartData,
-          backgroundColor: backgroundColors, // Use generated colors
+          backgroundColor: generateColors(props.chartData.length),
         },
       ],
     },
     options: {
       responsive: true,
-      indexAxis: 'y', // For horizontal bar chart
+      indexAxis: 'y',
       plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-        },
+        legend: { display: true, position: 'top' },
       },
-      scales: {
-        x: {
-          beginAtZero: true,
-        },
-      },
+      scales: { x: { beginAtZero: true } },
     },
   });
+
+  console.log('Chart initialized:', chartInstance);
+};
+
+
+watch(
+  () => ({ labels: props.chartLabels, data: props.chartData }), // Watch combined props
+  ({ labels, data }) => {
+    if (labels.length && data.length) {
+      console.log('Props updated: Reinitializing chart.');
+      initializeChart();
+    }
+  },
+  { immediate: true, deep: true }
+);
+
+onMounted(() => {
+  console.log('Initial chart data:', props.chartData);
+  console.log('Initial chart labels:', props.chartLabels);
+  initializeChart();
+
+  if (chartInstance) {
+    chartInstance.data.labels = props.chartLabels;
+    chartInstance.data.datasets[0].data = props.chartData;
+    chartInstance.data.datasets[0].backgroundColor = backgroundColors;
+    chartInstance.update();
+  }
 });
+
 
 onBeforeUnmount(() => {
   // Destroy the chart instance when the component is unmounted
   if (chartInstance) {
     chartInstance.destroy();
+    chartInstance = null;
   }
 });
 
 </script>
+
 
 <style scoped>
 .canvas-wrapper {
