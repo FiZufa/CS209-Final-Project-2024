@@ -17,7 +17,7 @@
           placeholder="Enter a number"
         />
         <button @click="analyzeData">Analyse</button>
-      </div>
+    </div>
     
 </template>
   

@@ -4,7 +4,7 @@
     <h1>Most Engaged Topics</h1>
 
     <div class="chart-container">
-        <MyChart />
+        <MyEngChart :chartLabels="chartLabels" :chartData="chartData" />
     </div>
 
     <div class="input-container">
@@ -17,16 +17,65 @@
           placeholder="Enter a number"
         />
         <button @click="analyzeData">Analyse</button>
-      </div>
+    </div>
     
 </template>
   
 <script>
 import AppHeader from '@/components/AppHeader.vue';
-import MyChart from '@/components/MyChart.vue';
+import MyEngChart from '@/components/MyEngChart.vue';
+import axios from 'axios';
 
 export default {
-    name: 'JavaTopic'
+  name: 'UserEngagement',
+  components: {
+    AppHeader,
+    MyEngChart,
+  },
+  data() {
+    return {
+      chartLabels: [], // Labels for the chart
+      chartData: [],   // Data points for the chart
+      dataNumber: 10,  // Default number of tags to fetch (set to 10 by default)
+    };
+  },
+  mounted() {
+    
+    this.fetchTopTags();
+  },
+  methods: {
+    async fetchTopTags() {
+      try {
+        
+        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/top-engagement-tags/${this.dataNumber || 10}`);
+        const tags = response.data;
+
+        if (tags && tags.length) {
+          console.log('Fetched tags:', tags);
+          // Map the JSON data to labels and data arrays
+          this.chartLabels = tags.map(tag => tag.name);
+          this.chartData = tags.map(tag => tag.totalEngagement);
+        } else {
+          console.warn('No tags returned from API.');
+          this.chartLabels = [];
+          this.chartData = [];
+        }
+      } catch (error) {
+        console.error('Error fetching top tags:', error);
+        this.chartLabels = [];
+        this.chartData = [];
+      }
+    },
+
+    analyzeData() {
+      if (this.dataNumber && this.dataNumber > 0) {
+        // Fetch tags based on the number input by the user
+        this.fetchTopTags();
+      } else {
+        alert('Please enter a valid number greater than 0');
+      }
+    },
+  },
 };
 
 </script>
