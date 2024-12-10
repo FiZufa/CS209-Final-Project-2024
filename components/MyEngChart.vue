@@ -49,7 +49,7 @@ const initializeChart = () => {
       labels: props.chartLabels,
       datasets: [
         {
-          label: 'Engagement Data',
+          label: '',
           data: props.chartData,
           backgroundColor: generateColors(props.chartData.length),
         },

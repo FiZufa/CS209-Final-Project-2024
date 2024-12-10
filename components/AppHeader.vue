@@ -23,19 +23,67 @@
                 <img src="@/assets/answer.png" alt="image" class="img">
                 <button class="answer-btn">Answer quality</button>
             </div>
+
+            <div class="search-container">
+              <img src="@/assets/search.png" alt="image" class="img-search" @click="togglePopup">
+            </div>
         </div>
+
+        <!-- Popup Box -->
+    <div v-if="showPopup" class="popup-overlay">
+      <div class="popup-box">
+        <h2>Search Box</h2>
+        <input type="text" v-model="searchTerm" placeholder="Enter Java Topic or Error keyword..." />
+        <div class="btn-container">
+          <button class="search-topic-btn" @click="searchJavaTopic">Search Java Topic</button>
+          <button class="search-error-btn">Search Error or Exception</button>
+        </div>
+        <button class="close-btn" @click="closePopup">close</button>
+      </div>
+    </div>
+
     </header>
 
 </template>
 <script setup>
+import { ref } from 'vue';  // Import ref from Vue for reactive data
 import { useRouter } from 'vue-router';  // Import the useRouter hook
+import axios from 'axios';
 
-const router = useRouter();  // Create a router instance
+const showPopup = ref(false); 
+const searchTerm = ref('');
 
-// Define the gotoAnotherPage function
+const router = useRouter();
+
 const gotoAnotherPage = (path) => {
-  console.log('Navigating to:', path);  // Debugging line
+  console.log('Navigating to:', path); 
   router.push(path);
+};
+
+const togglePopup = () => {
+  showPopup.value = !showPopup.value; 
+};
+
+const closePopup = () => {
+  showPopup.value = false; 
+};
+
+const searchJavaTopic = async () => {
+  if (!searchTerm.value.trim()) {
+    alert('Please enter a Java topic!');
+    return;
+  }
+
+  const endpoint = `http://35.240.167.146:16800/api/v1/questions/frequency/${searchTerm.value}`;
+  try {
+    const response = await axios.get(endpoint);
+    console.log('Search Java Topic Response:', response.data);
+
+    alert(`Frequency for "${searchTerm.value}": ${response.data}`);
+  } catch (error) {
+    console.error('Error fetching Java topic data:', error);
+    alert('An error occurred while fetching data. Please try again.');
+  }
 };
 
 </script>
@@ -95,8 +143,8 @@ html, body {
   }
   
   .img {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     margin-bottom: 10px;
   }
   
@@ -127,6 +175,18 @@ html, body {
     opacity: 70%;
   }
 
+  .img-search {
+    width: 2.5em;
+    height: 2.5em;
+
+    cursor: pointer;
+    opacity: 0.7;
+  }
+
+  .img-search:hover {
+    opacity: 1.0;
+  }
+
   .topic-container,
   .user-container,
   .error-container,
@@ -135,5 +195,85 @@ html, body {
     flex-direction: row;  /* Stack images and buttons vertically */
     align-items: center;     /* Center the contents horizontally */
     margin: 0 10px; 
+  }
+
+  .search-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .img-search {
+    cursor: pointer;
+    width: 50px; /* Set image size as needed */
+    height: 50px; /* Set image size as needed */
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .popup-box h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    color: #000;
+  }
+  
+  .popup-box {
+    background: white;
+    padding: 45px;
+    border-radius: 5px;
+    width: 700px;
+    height: 300px;
+    margin-top: 10px;
+    display: flex; /* Ensure popup content is displayed as flex */
+    justify-content: center;
+    flex-direction: column; /* Stack content vertically */
+    align-items: center; /* Center the content horizontally */
+  }
+  
+  .popup-box input {
+    width: 60%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .btn-container {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .search-topic-btn, .search-error-btn {
+    padding: 8px;
+    background-color: darkgreen;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+  }
+  .search-topic-btn:hover, .search-error-btn:hover {
+    background-color: rgb(6, 58, 6);
+    cursor: pointer;
+  }
+
+  .close-btn {
+    background-color: #ccc;
+    padding: 8px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
+  .close-btn:hover {
+    background-color: darkgrey;
   }
 </style>
