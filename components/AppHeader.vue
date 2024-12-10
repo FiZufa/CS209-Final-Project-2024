@@ -38,6 +38,12 @@
           <button class="search-topic-btn" @click="searchJavaTopic">Search Java Topic</button>
           <button class="search-error-btn">Search Error or Exception</button>
         </div>
+
+        <!-- Results Section -->
+        <div v-if="javaTopicsearchResults" class="results-box">
+          <p>Frequency for "<span class="span-term">{{ searchTerm }}</span>" is <span class="span-result">{{ javaTopicsearchResults }}</span></p>
+        </div>
+
         <button class="close-btn" @click="closePopup">close</button>
       </div>
     </div>
@@ -52,6 +58,7 @@ import axios from 'axios';
 
 const showPopup = ref(false); 
 const searchTerm = ref('');
+const javaTopicsearchResults = ref('');
 
 const router = useRouter();
 
@@ -66,6 +73,8 @@ const togglePopup = () => {
 
 const closePopup = () => {
   showPopup.value = false; 
+  searchTerm.value = ''; // Clear the input field
+  javaTopicsearchResults.value = ''; // Clear the search results
 };
 
 const searchJavaTopic = async () => {
@@ -79,7 +88,9 @@ const searchJavaTopic = async () => {
     const response = await axios.get(endpoint);
     console.log('Search Java Topic Response:', response.data);
 
-    alert(`Frequency for "${searchTerm.value}": ${response.data}`);
+    javaTopicsearchResults.value = response.data;
+
+    //alert(`Frequency for "${searchTerm.value}": ${response.data}`);
   } catch (error) {
     console.error('Error fetching Java topic data:', error);
     alert('An error occurred while fetching data. Please try again.');
@@ -275,5 +286,18 @@ html, body {
 
   .close-btn:hover {
     background-color: darkgrey;
+  }
+
+  .results-box p {
+    color: black;
+  }
+
+  .span-result {
+    color: red;
+    font-size: 20px;
+  }
+
+  .span-term {
+    color: blue;
   }
 </style>
