@@ -51,7 +51,7 @@ const initializeChart = () => {
       labels: props.chartLabels,
       datasets: [
         {
-          label: 'Total Engagement',
+          label: '',
           data: props.chartData,
           backgroundColor: generateColors(props.chartData.length),
         },

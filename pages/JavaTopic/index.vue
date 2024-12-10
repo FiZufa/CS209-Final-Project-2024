@@ -7,17 +7,17 @@
       <MyChart :chartData="chartData" :chartLabels="chartLabels" />
     </div>
 
-<!--    <div class="input-container">-->
-<!--        <label for="dataNumber">Enter the number of data points:</label>-->
-<!--        <input-->
-<!--          v-model="dataNumber"-->
-<!--          id="dataNumber"-->
-<!--          type="number"-->
-<!--          min="1"-->
-<!--          placeholder="Enter a number"-->
-<!--        />-->
-<!--        <button @click="analyzeData">Analyse</button>-->
-<!--      </div>-->
+   <div class="input-container">
+       <label for="dataNumber">Enter the number of data points:</label>
+       <input
+          v-model="dataNumber"
+         id="dataNumber"
+          type="number"
+          min="1"
+          placeholder="Enter a number"
+        />
+        <button @click="analyzeData">Analyse</button>
+      </div>
     
 </template>
   
@@ -36,45 +36,46 @@ export default {
     return {
       chartLabels: [], // Labels for the chart
       chartData: [], // Data points for the chart
+      dataNumber: null, // Default number of tags
     };
   },
   mounted() {
-    this.fetchTopTags();
+    this.fetchTopTags(); // Fetch top tags when mounted
   },
   methods: {
-  async fetchTopTags() {
-    try {
-      const response = await axios.get('http://35.240.167.146:16800/api/v1/questions/top-tags/10');
-      const tags = response.data;
+    async fetchTopTags() {
+      try {
+        // Fetch the top tags based on the user input (dataNumber)
+        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/top-tags/${this.dataNumber || 10}`);
+        const tags = response.data;
 
-      if (tags && tags.length) { // Ensure tags are valid
-        console.log('Fetched tags:', tags);
-
-        this.chartLabels = tags.map(tag => tag.name);
-        this.chartData = tags.map(tag => tag.frequency);
-      } else {
-        console.warn('No tags returned from API.');
+        if (tags && tags.length) {
+          console.log('Fetched tags:', tags);
+          // Map the JSON data to labels and data arrays
+          this.chartLabels = tags.map(tag => tag.name);
+          this.chartData = tags.map(tag => tag.frequency);
+        } else {
+          console.warn('No tags returned from API.');
+          this.chartLabels = [];
+          this.chartData = [];
+        }
+      } catch (error) {
+        console.error('Error fetching top tags:', error);
         this.chartLabels = [];
         this.chartData = [];
       }
-    } catch (error) {
-      console.error('Error fetching top tags:', error);
-      this.chartLabels = [];
-      this.chartData = [];
-    }
+    },
+
+    analyzeData() {
+      if (this.dataNumber && this.dataNumber > 0) {
+        // Fetch tags based on the number input by the user
+        this.fetchTopTags();
+      } else {
+        alert('Please enter a valid number greater than 0');
+      }
+    },
   },
-},
-
 };
-
-// const analyzeData = () => {
-//   if (dataNumber.value && dataNumber.value > 0) {
-//     alert(`Analyzing data for ${dataNumber.value} points.`);
-//     // You can update `chartData` dynamically based on user input here
-//   } else {
-//     alert('Please enter a valid number greater than 0');
-//   }
-// };
 
 </script>
   
