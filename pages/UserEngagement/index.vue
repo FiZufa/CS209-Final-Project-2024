@@ -36,7 +36,7 @@ export default {
     return {
       chartLabels: [], // Labels for the chart
       chartData: [],   // Data points for the chart
-      dataNumber: 10,  // Default number of tags to fetch (set to 10 by default)
+      dataNumber: null,  // Default number of tags to fetch (set to 10 by default)
     };
   },
   mounted() {
