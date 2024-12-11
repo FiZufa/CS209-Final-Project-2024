@@ -36,12 +36,12 @@
         <input type="text" v-model="searchTerm" placeholder="Enter Java Topic or Error keyword..." />
         <div class="btn-container">
           <button class="search-topic-btn" @click="searchJavaTopic">Search Java Topic</button>
-          <button class="search-error-btn">Search Error or Exception</button>
+          <button class="search-error-btn" @click="searchException">Search Error or Exception</button>
         </div>
 
         <!-- Results Section -->
-        <div v-if="javaTopicsearchResults" class="results-box">
-          <p>Frequency for "<span class="span-term">{{ searchTerm }}</span>" is <span class="span-result">{{ javaTopicsearchResults }}</span></p>
+        <div v-if="searchResults" class="results-box">
+          <p>Frequency for "<span class="span-term">{{ searchTerm }}</span>" is <span class="span-result">{{ searchResults }}</span></p>
         </div>
 
         <button class="close-btn" @click="closePopup">close</button>
@@ -58,7 +58,7 @@ import axios from 'axios';
 
 const showPopup = ref(false); 
 const searchTerm = ref('');
-const javaTopicsearchResults = ref('');
+const searchResults = ref('');
 
 const router = useRouter();
 
@@ -74,7 +74,7 @@ const togglePopup = () => {
 const closePopup = () => {
   showPopup.value = false; 
   searchTerm.value = ''; // Clear the input field
-  javaTopicsearchResults.value = ''; // Clear the search results
+  searchResults.value = ''; // Clear the search results
 };
 
 const searchJavaTopic = async () => {
@@ -88,7 +88,7 @@ const searchJavaTopic = async () => {
     const response = await axios.get(endpoint);
     console.log('Search Java Topic Response:', response.data);
 
-    javaTopicsearchResults.value = response.data;
+    searchResults.value = response.data;
 
     //alert(`Frequency for "${searchTerm.value}": ${response.data}`);
   } catch (error) {
@@ -96,6 +96,24 @@ const searchJavaTopic = async () => {
     alert('An error occurred while fetching data. Please try again.');
   }
 };
+
+const searchException = async () => {
+  if (!searchTerm.value.trim()) {
+    alert('Please enter an error or exception!');
+    return;
+  }
+
+  const endpoint = `http://35.240.167.146:16800/api/v1/questions/mistake-frequency/${searchTerm.value}`;
+  try {
+    const response = await axios.get(endpoint);
+    console.log('Search Error or Exception Response:', response.data);
+
+    searchResults.value = response.data;
+  } catch (error) {
+    console.error('Error fetching exception data:', error);
+    alert('An error occurred while fetching data. Please try again.');
+  }
+}
 
 </script>
 <style scoped>
