@@ -4,7 +4,7 @@
     <h1>Most Discussed Errors and Exceptions</h1>
 
     <div class="chart-container">
-        <MyChart />
+        <MyChart :chartData="chartData" :chartLabels="chartLabels" />
     </div>
 
     <div class="input-container">
@@ -23,19 +23,63 @@
   
 <script>
 import AppHeader from '@/components/AppHeader.vue';
-import MyChart from '@/components/MyChart.vue';
+import MyErrorChart from '@/components/MyErrorChart.vue';
+import axios from 'axios';
 
 export default {
-    name: 'JavaTopic'
-};
+  name: 'UserEngagement',
+  components: {
+    AppHeader,
+    MyErrorChart,
+  },
+  data() {
+    return {
+      chartLabels: [], // Labels for the chart
+      chartData: [],   // Data points for the chart
+      dataNumber: null,  
+      loading: false,
+    };
+  },
+  mounted() {
+    
+    this.fetchTopTags();
+  },
+  methods: {
+    async fetchTopTags() {
+      this.loading = true;
+      try {
+        
+        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/common-error/${this.dataNumber || 10}`);
+        const tags = response.data;
 
-const analyzeData = () => {
-  if (dataNumber.value && dataNumber.value > 0) {
-    alert(`Analyzing data for ${dataNumber.value} points.`);
-    // You can update `chartData` dynamically based on user input here
-  } else {
-    alert('Please enter a valid number greater than 0');
-  }
+        if (tags && tags.length) {
+          console.log('Fetched tags:', tags);
+          // Map the JSON data to labels and data arrays
+          this.chartLabels = tags.map(tag => tag.name);
+          this.chartData = tags.map(tag => tag.frequency);
+        } else {
+          console.warn('No tags returned from API.');
+          this.chartLabels = [];
+          this.chartData = [];
+        }
+      } catch (error) {
+        console.error('Error fetching top tags:', error);
+        this.chartLabels = [];
+        this.chartData = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    analyzeData() {
+      if (this.dataNumber && this.dataNumber > 0) {
+        // Fetch tags based on the number input by the user
+        this.fetchTopTags();
+      } else {
+        alert('Please enter a valid number greater than 0');
+      }
+    },
+  },
 };
 
 </script>

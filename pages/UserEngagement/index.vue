@@ -1,7 +1,7 @@
 <template>
     <AppHeader />
 
-    <h1>Most Engaged Topics</h1>
+    <h1>Most Engaged Java Topics</h1>
 
     <!-- Loading Screen -->
     <div v-if="loading" class="loading-screen">
@@ -23,12 +23,20 @@
         />
         <button @click="analyzeData">Analyse</button>
     </div>
+
+    <h1>Most Engaged Java Topics with engagement parameter</h1>
+
+    <div class="chart-container">
+      <MyDoughnut :chartLabels="chartLabels" :chartData="chartData" />
+    </div>
+
     
 </template>
   
 <script>
 import AppHeader from '@/components/AppHeader.vue';
 import MyEngChart from '@/components/MyEngChart.vue';
+import MyDoughnut from '@/components/MyDoughnut.vue';
 import axios from 'axios';
 
 export default {
@@ -36,6 +44,7 @@ export default {
   components: {
     AppHeader,
     MyEngChart,
+    MyDoughnut,
   },
   data() {
     return {
