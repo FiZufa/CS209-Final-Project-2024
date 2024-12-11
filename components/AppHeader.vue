@@ -1,5 +1,6 @@
 <template>
     <header class="header">
+
         <div class="logo">
             <img  src="@/assets/stacklogo.png" alt="logo" @click="gotoAnotherPage('/')">
         </div>
@@ -46,6 +47,11 @@
 
         <button class="close-btn" @click="closePopup">close</button>
       </div>
+
+      <div v-if="loading" class="loading-screen">
+        <div class="spinner"></div>
+      </div>
+      
     </div>
 
     </header>
@@ -59,6 +65,7 @@ import axios from 'axios';
 const showPopup = ref(false); 
 const searchTerm = ref('');
 const searchResults = ref('');
+const loading = ref(false);
 
 const router = useRouter();
 
@@ -83,6 +90,8 @@ const searchJavaTopic = async () => {
     return;
   }
 
+  loading.value = true;
+
   const endpoint = `http://35.240.167.146:16800/api/v1/questions/frequency/${searchTerm.value}`;
   try {
     const response = await axios.get(endpoint);
@@ -94,6 +103,8 @@ const searchJavaTopic = async () => {
   } catch (error) {
     console.error('Error fetching Java topic data:', error);
     alert('An error occurred while fetching data. Please try again.');
+  } finally {
+    loading.value = false;  // Stop loading
   }
 };
 
@@ -102,6 +113,8 @@ const searchException = async () => {
     alert('Please enter an error or exception!');
     return;
   }
+
+  loading.value = true;
 
   const endpoint = `http://35.240.167.146:16800/api/v1/questions/mistake-frequency/${searchTerm.value}`;
   try {
@@ -112,6 +125,8 @@ const searchException = async () => {
   } catch (error) {
     console.error('Error fetching exception data:', error);
     alert('An error occurred while fetching data. Please try again.');
+  } finally {
+    loading.value = false;  // Stop loading
   }
 }
 
@@ -317,5 +332,33 @@ html, body {
 
   .span-term {
     color: blue;
+  }
+
+  .loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 </style>
