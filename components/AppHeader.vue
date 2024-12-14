@@ -22,7 +22,7 @@
 
             <div class="answer-container">
                 <img src="@/assets/answer.png" alt="image" class="img">
-                <button class="answer-btn">Answer quality</button>
+                <button class="answer-btn" @click="gotoAnotherPage('/AnswerQuality')">Answer quality</button>
             </div>
 
             <div class="search-container">
