@@ -44,7 +44,7 @@ const initializeChart = () => {
 
   // Create new chart instance
   chartInstance = new Chart(chartCanvas.value, {
-    type: 'bar',
+    type: 'pie',
     data: {
       labels: props.chartLabels,
       datasets: [
@@ -52,9 +52,7 @@ const initializeChart = () => {
           label: '',
           data: props.chartData,
           backgroundColor: generateColors(props.chartData.length),
-          borderRadius: 25,
-          borderWidth: 4,
-          borderSkipped: false,
+          borderRadius: 0,
         },
       ],
     },
@@ -99,11 +97,12 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  height: 70vh; /* Adjust the height as needed */
+  height: 80vh; /* Adjust the height as needed */
+  width:100vh;
 }
 
 canvas {
-  width: 75% !important; /* Make the canvas fill the parent container */
-  height: auto !important; /* Maintain aspect ratio */
+  height: 100% !important; /* Maintain aspect ratio */
+  width: auto;
 }
 </style>

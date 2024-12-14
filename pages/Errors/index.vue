@@ -3,8 +3,9 @@
 
     <h1>Most Discussed Errors and Exceptions</h1>
 
-    <div class="chart-container">
-        <MyChart :chartData="chartData" :chartLabels="chartLabels" />
+    <div class="body">
+      <div class="chart-container">
+        <MyErrorChart :chartData="chartData" :chartLabels="chartLabels" />
     </div>
 
     <div class="input-container">
@@ -17,7 +18,8 @@
           placeholder="Enter a number"
         />
         <button @click="analyzeData">Analyse</button>
-      </div>
+    </div>
+    </div>
     
 </template>
   
@@ -90,6 +92,14 @@ export default {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+}
+
+body{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
 }
 
 /* Center the chart container */
@@ -97,7 +107,7 @@ export default {
     display: flex; /* Use Flexbox */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically within the container */
-    height: 70vh; /* Adjust height to fit the viewport as needed */
+    
     margin: 0 auto; /* Optional: Centers the container itself */
 }
 
@@ -106,15 +116,15 @@ h1 {
     text-align: center;
     margin-bottom: 20px; /* Add spacing below the header */
     margin-top: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
 }
 
-.input-container {
+  .input-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 50px;
+    margin-top: 40px;
+    margin-bottom: 20px;
   }
   
   .input-container input {
