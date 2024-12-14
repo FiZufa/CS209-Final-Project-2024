@@ -121,7 +121,7 @@ const searchException = async () => {
     const response = await axios.get(endpoint);
     console.log('Search Error or Exception Response:', response.data);
 
-    searchResults.value = response.data;
+    searchResults.value = response.data.frequency;
   } catch (error) {
     console.error('Error fetching exception data:', error);
     alert('An error occurred while fetching data. Please try again.');

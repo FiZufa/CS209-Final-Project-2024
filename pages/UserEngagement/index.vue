@@ -24,11 +24,32 @@
         <button @click="analyzeData">Analyse</button>
     </div>
 
-    <h1>Most Engaged Java Topics with engagement parameter</h1>
+    <h1>Most Engaged Java Topics (with engagement parameter)</h1>
 
     <div class="chart-container">
-      <MyDoughnut :chartLabels="chartLabels" :chartData="chartData" />
+      <MyDoughnut :chartLabels="chartLabels2" :chartData="chartData2" />
     </div>
+
+    <div class="input-container">
+      <label for="topN">Enter the number of data points:</label>
+      <input
+        v-model="topN"
+        id="topN"
+        type="number"
+        min="1"
+        placeholder="Enter a number"
+      />
+      
+      <label for="reputation">Enter user reputation:</label>
+      <input
+        v-model="reputation"
+        id="reputation"
+        type="number"
+        min="1"
+        placeholder="Enter a number"
+      />
+      <button @click="analyzeDataWithParameter">Analyse</button>
+  </div>
 
     
 </template>
@@ -50,13 +71,18 @@ export default {
     return {
       chartLabels: [], // Labels for the chart
       chartData: [],   // Data points for the chart
-      dataNumber: null,  
+      dataNumber: null, 
+      chartLabels2: [],
+      chartData2: [],
+      topN: null,
+      reputation: null,
       loading: false,
     };
   },
   mounted() {
     
     this.fetchTopTags();
+    this.fetchTopTagsWithReputation();
   },
   methods: {
     async fetchTopTags() {
@@ -85,6 +111,32 @@ export default {
       }
     },
 
+    async fetchTopTagsWithReputation(){
+      this.loading = true;
+      try {
+        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/top-engagement-tags-top-users/${this.topN || 10}/${this.reputation || 10000}`);
+        const tags2 = response.data;
+
+        if (tags2 && tags2.length) {
+          console.log('Fetched tags2:', tags2);
+          // Map the JSON data to labels and data arrays
+          this.chartLabels2 = tags2.map(tag2 => tag2.name);
+          this.chartData2 = tags2.map(tag2 => tag2.totalEngagement);
+
+        } else {
+          console.warn('No tags2 returned from API.');
+          this.chartLabels2 = [];
+          this.chartData2 = [];
+        }
+      } catch(error) {
+        console.error('Error fetching top tags2:', error);
+        this.chartLabels2 = [];
+        this.chartData2 = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+
     analyzeData() {
       if (this.dataNumber && this.dataNumber > 0) {
         // Fetch tags based on the number input by the user
@@ -93,6 +145,14 @@ export default {
         alert('Please enter a valid number greater than 0');
       }
     },
+
+    analyzeDataWithParameter() {
+      if (this.topN && this.topN > 0 && this.reputation && this.reputation>0){
+        this.fetchTopTagsWithReputation();
+      } else {
+        alert('Please enter a valid number!')
+      }
+    }
   },
 };
 
