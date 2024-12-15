@@ -97,6 +97,8 @@ onBeforeUnmount(() => {
 </script>
 <style scoped>
 
-.canvas-wrapper {}
+.canvas-wrapper {
+}
+
 
 </style>

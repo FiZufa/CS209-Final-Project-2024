@@ -121,18 +121,17 @@ export default {
     box-sizing: border-box;
 }
 
+.charts {
+  display: flex;
+  flex-direction: row;
+}
+
 .chart-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center; 
-    height: 60vh; 
     margin: 0 auto; 
-}
-
-.charts {
-  display: flex;
-  flex-direction: row;
 }
 
 h1 {
