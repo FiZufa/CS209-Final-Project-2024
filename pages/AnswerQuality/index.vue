@@ -11,15 +11,15 @@
     
     <div class="charts">
         <div class="chart-container">
-            <Answer :chartData="chartDataScore" :chartLabels="chartLabels" :title="'Answer Score'"/>
+            <Answer :chartData="avgScore" :chartLabels="isAccepted" :title="'Answer Score'"/>
           </div>
       
           <div class="chart-container">
-              <Answer :chartData="chartDataReputation" :chartLabels="chartLabels" :title="'Owner Reputation'"/>
+              <Answer :chartData="avgOwnerReputation" :chartLabels="isAccepted" :title="'Owner Reputation'"/>
           </div>
       
           <div class="chart-container">
-              <Answer :chartData="chartDataTimeElapsed" :chartLabels="chartLabels" :title="'Time Elapsed'"/>
+              <Answer :chartData="avgTimeElapse" :chartLabels="isAccepted" :title="'Time Elapsed'"/>
           </div>
     </div>
 
@@ -52,14 +52,10 @@ export default {
   },
   data() {
     return {
-      timeElapsed: [], 
-      ownerReputation: [], 
-      score: [],
       isAccepted: [],
-      chartDataScore: [],        // Final data for Answer Score chart
-      chartDataReputation: [],   // Final data for Owner Reputation chart
-      chartDataTimeElapsed: [],  // Final data for Time Elapsed chart
-      chartLabels: ["Yes", "No"],
+      avgTimeElapse: [],
+      avgOwnerReputation: [],
+      avgScore: [],
       dataNumber: null,
       loading: false,
     };
@@ -72,18 +68,17 @@ export default {
       this.loading = true;
       try {
         // Fetch the top tags based on the user input (dataNumber)
-        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/overall-answer-quality/${this.dataNumber || 100}`);
+        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/overall-answer-quality/${this.dataNumber || 1000}`);
         const tags = response.data;
 
-        if (tags && tags.length) {
+        if (tags) {
           console.log('Fetched tags:', tags);
-          // Map the JSON data to labels and data arrays
-          this.isAccepted = tags.map(tag => tag.isAccepted);
-          this.timeElapsed = tags.map(tag => tag.timeElapsed);
-          this.ownerReputation = tags.map(tag => tag.ownerReputation);
-          this.score = tags.map(tag => tag.score);
+          const isAcceptedKeys = Object.keys(tags); // ["false", "true"]
+          this.isAccepted = isAcceptedKeys.map(key => tags[key].isAccepted);
+          this.avgTimeElapse = isAcceptedKeys.map(key => tags[key].avgTimeElapse);
+          this.avgOwnerReputation = isAcceptedKeys.map(key => tags[key].avgOwnerReputation);
+          this.avgScore = isAcceptedKeys.map(key => tags[key].avgScore);
 
-          this.calculateAverages();
         } else {
           console.warn('No tags returned from API.');
           this.resetData()
@@ -105,56 +100,11 @@ export default {
       }
     },
 
-    calculateAverages() {
-      // Group data by isAccepted (Yes/No)
-      const yesData = this.filterByAcceptance("Yes");
-      const noData = this.filterByAcceptance("No");
-
-      // Calculate averages for "Yes" and "No" answers
-      const avgYes = this.calculateAverage(yesData);
-      const avgNo = this.calculateAverage(noData);
-
-      // Store the averages for later use in the charts
-      this.chartLabels = ["Yes", "No"];
-      this.chartDataScore = [avgYes.score, avgNo.score];
-      this.chartDataReputation = [avgYes.reputation, avgNo.reputation];
-      this.chartDataTimeElapsed = [avgYes.timeElapsed, avgNo.timeElapsed];
-    },
-
-    filterByAcceptance(acceptance) {
-      return {
-        timeElapsed: this.timeElapsed.filter((_, index) => this.isAccepted[index] === acceptance),
-        ownerReputation: this.ownerReputation.filter((_, index) => this.isAccepted[index] === acceptance),
-        score: this.score.filter((_, index) => this.isAccepted[index] === acceptance),
-      };
-    },
-
-    calculateAverage(data) {
-      const avgTimeElapsed = this.calculateArrayAverage(data.timeElapsed);
-      const avgOwnerReputation = this.calculateArrayAverage(data.ownerReputation);
-      const avgScore = this.calculateArrayAverage(data.score);
-
-      return {
-        timeElapsed: avgTimeElapsed,
-        reputation: avgOwnerReputation,
-        score: avgScore,
-      };
-    },
-
-    // Calculate the average of an array
-    calculateArrayAverage(arr) {
-      if (arr.length === 0) return 0;
-      return arr.reduce((sum, value) => sum + value, 0) / arr.length;
-    },
-
     resetData() {
       this.isAccepted = [];
-      this.timeElapsed = [];
-      this.ownerReputation = [];
-      this.score = [];
-      this.chartDataScore = [];
-      this.chartDataReputation = [];
-      this.chartDataTimeElapsed = [];
+      this.avgTimeElapse = [];
+      this.avgOwnerReputation = [];
+      this.avgScore = [];
     },
 
     
@@ -171,19 +121,23 @@ export default {
     box-sizing: border-box;
 }
 
-/* Center the chart container */
 .chart-container {
-    display: flex; /* Use Flexbox */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically within the container */
-    height: 70vh; /* Adjust height to fit the viewport as needed */
-    margin: 0 auto; /* Optional: Centers the container itself */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    height: 60vh; 
+    margin: 0 auto; 
 }
 
-/* Center the header text */
+.charts {
+  display: flex;
+  flex-direction: row;
+}
+
 h1 {
     text-align: center;
-    margin-bottom: 20px; /* Add spacing below the header */
+    margin-bottom: 20px; 
     margin-top: 30px;
     margin-bottom: 20px;
 }
@@ -192,8 +146,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
   }
   
   .input-container input {

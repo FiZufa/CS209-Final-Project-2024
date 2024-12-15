@@ -64,9 +64,9 @@ const initializeChart = () => {
     },
     options: {
       responsive: true,
-      indexAxis: 'y',
+      indexAxis: 'x',
       plugins: {
-        legend: { display: true, position: 'top' },
+        legend: { display: false },
       },
       scales: { x: { beginAtZero: true } },
     },
@@ -96,16 +96,7 @@ onBeforeUnmount(() => {
 });
 </script>
 <style scoped>
-.canvas-wrapper {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 80vh; /* Adjust the height as needed */
-  width:100vh;
-}
 
-canvas {
-  height: 100% !important; /* Maintain aspect ratio */
-  width: auto;
-}
+.canvas-wrapper {}
+
 </style>
