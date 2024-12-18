@@ -10,16 +10,17 @@
 
     
     <div class="charts">
-        <div class="chart-container">
-            <Answer :chartData="avgScore" :chartLabels="isAccepted" :title="'Answer Score'"/>
+      
+          <div class="chart-container">
+              <Answer :chartData="normalizeScore" :chartLabels="normalizeReputation" :title="'Owner Reputation'"/>
           </div>
       
           <div class="chart-container">
-              <Answer :chartData="avgOwnerReputation" :chartLabels="isAccepted" :title="'Owner Reputation'"/>
+              <Answer :chartData="normalizeScore" :chartLabels="normalizeTime" :title="'Time Elapsed'"/>
           </div>
-      
+          
           <div class="chart-container">
-              <Answer :chartData="avgTimeElapse" :chartLabels="isAccepted" :title="'Time Elapsed'"/>
+            <Answer :chartData="normalizeScore" :chartLabels="normalizeLength" :title="'Answer Length'"/>
           </div>
     </div>
 
@@ -53,45 +54,90 @@ export default {
   data() {
     return {
       isAccepted: [],
-      avgTimeElapse: [],
-      avgOwnerReputation: [],
-      avgScore: [],
+      timeElapsed: [],
+      ownerReputation: [],
+      upvote: [],
+      answerLength: [],
+      normalizeTime: [],
+      normalizeReputation: [],
+      normalizeLength: [],
+      normalizeScore: [],
       dataNumber: null,
       loading: false,
+
     };
   },
   mounted() {
     this.fetchAnswerData(); 
   },
   methods: {
-    async fetchAnswerData() {
-      this.loading = true;
-      try {
-        // Fetch the top tags based on the user input (dataNumber)
-        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/overall-answer-quality/${this.dataNumber || 1000}`);
-        const tags = response.data;
+  async fetchAnswerData() {
+    this.loading = true;
+    try {
+      const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/overall-answer-quality/${this.dataNumber || 1000}`);
+      const tags = response.data;
 
-        if (tags) {
-          console.log('Fetched tags:', tags);
-          const isAcceptedKeys = Object.keys(tags); // ["false", "true"]
-          this.isAccepted = isAcceptedKeys.map(key => tags[key].isAccepted);
-          this.avgTimeElapse = isAcceptedKeys.map(key => tags[key].avgTimeElapse);
-          this.avgOwnerReputation = isAcceptedKeys.map(key => tags[key].avgOwnerReputation);
-          this.avgScore = isAcceptedKeys.map(key => tags[key].avgScore);
+      if (tags) {
+        this.isAccepted = tags.map(tag => tag.isAccepted);
+        this.timeElapsed = tags.map(tag => tag.timeElapse/60);
+        this.ownerReputation = tags.map(tag => tag.ownerReputation);
+        this.upvote = tags.map(tag => tag.score);
+        this.answerLength = tags.map(tag => tag.answerLength);
 
-        } else {
-          console.warn('No tags returned from API.');
-          this.resetData()
-        }
-      } catch (error) {
-        console.error('Error fetching top tags:', error);
-        this.resetData()
-      } finally {
-        this.loading = false;
+        this.normalizeData();
+      } else {
+        console.warn('No tags returned from API.');
+        this.resetData();
       }
-    },
+    } catch (error) {
+      console.error('Error fetching top tags:', error);
+      this.resetData();
+    } finally {
+      this.loading = false;
+    }
+  },
 
-    analyzeData() {
+  normalizeData() {
+    const logTransform = (array) => array.map(value => Math.log(value + 1)); // Add 1 to avoid log(0)
+
+    // Example in normalizeData
+    const normalize = (array) => {
+    const transformed = logTransform(array); // Apply log transformation
+    const min = Math.min(...transformed);
+    const max = Math.max(...transformed);
+
+    if (min === max) {
+      return transformed.map(() => 0.5);
+    }
+
+    return transformed.map(value => {
+      const normalized = (value - min) / (max - min);
+      return Math.min(normalized, 1.0); // Clamp if needed
+    });
+  };
+
+
+  this.normalizeTime = normalize(this.timeElapsed);
+  this.normalizeReputation = normalize(this.ownerReputation);
+  this.normalizeLength = normalize(this.answerLength);
+  this.normalizeScore = normalize(this.upvote);
+
+  console.log('Normalized Time:', this.normalizeTime);
+  console.log('Normalized Reputation:', this.normalizeReputation);
+  console.log('Normalized Length:', this.normalizeLength);
+  console.log('Normalized Score:', this.normalizeScore);
+},
+  resetData() {
+    this.isAccepted = [];
+    this.timeElapsed = [];
+    this.ownerReputation = [];
+    this.upvote = [];
+    this.answerLength = [];
+    this.normalizeTime = [];
+    this.normalizeReputation = [];
+    this.normalizeLength = [];
+  },
+  analyzeData() {
       if (this.dataNumber && this.dataNumber > 0) {
         // Fetch tags based on the number input by the user
         this.fetchAnswerData();
@@ -99,16 +145,8 @@ export default {
         alert('Please enter a valid number greater than 0');
       }
     },
+}
 
-    resetData() {
-      this.isAccepted = [];
-      this.avgTimeElapse = [];
-      this.avgOwnerReputation = [];
-      this.avgScore = [];
-    },
-
-    
-  },
 };
 
 </script>
@@ -123,7 +161,7 @@ export default {
 
 .charts {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .chart-container {

@@ -114,7 +114,7 @@ export default {
     async fetchTopTagsWithReputation(){
       this.loading = true;
       try {
-        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/top-engagement-tags-top-users/${this.topN || 10}/${this.reputation || 10000}`);
+        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/top-engagement-tags-top-users/${this.topN || 10}/${this.reputation || 5000}`);
         const tags2 = response.data;
 
         if (tags2 && tags2.length) {
