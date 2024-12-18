@@ -1,5 +1,5 @@
 <template>
-    <h3>{{ title }}</h3>
+    <h2>{{ title }}</h2>
     <div class="canvas-wrapper">
         <canvas ref="chartCanvas"></canvas>
     </div>
@@ -34,7 +34,7 @@ let chartInstance = null;
 
 const initializeChart = () => {
   let correlationText = '';
-  
+
   if (!chartCanvas.value || !props.chartLabels.length || !props.chartData.length) {
     console.warn('Cannot initialize chart: Missing canvas or props.');
     return;
@@ -128,7 +128,7 @@ const initializeChart = () => {
         legend: { display: true, position: 'top' },
         title: {
           display: true,
-          text: `${props.title || 'Scatter Plot'} (${correlationText})`, // Include correlation in the title
+          text: `(${correlationText})`, // Include correlation in the title
         },
       },
       scales: {
