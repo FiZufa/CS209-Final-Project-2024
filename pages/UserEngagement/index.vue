@@ -9,7 +9,7 @@
     </div>
 
     <div class="chart-container">
-        <MyEngChart :chartLabels="chartLabels" :chartData="chartData" />
+        <MyDoughnut :chartLabels="chartLabels" :chartData="chartData" />
     </div>
 
     <div class="input-container">
@@ -24,7 +24,7 @@
         <button @click="analyzeData">Analyse</button>
     </div>
 
-    <h1>Most Engaged Java Topics (with engagement parameter)</h1>
+    <!-- <h1>Most Engaged Java Topics (with engagement parameter)</h1>
 
     <div class="chart-container">
       <MyDoughnut :chartLabels="chartLabels2" :chartData="chartData2" />
@@ -49,7 +49,7 @@
         placeholder="Enter a number"
       />
       <button @click="analyzeDataWithParameter">Analyse</button>
-  </div>
+  </div> -->
 
     
 </template>
@@ -96,7 +96,7 @@ export default {
           console.log('Fetched tags:', tags);
           // Map the JSON data to labels and data arrays
           this.chartLabels = tags.map(tag => tag.name);
-          this.chartData = tags.map(tag => tag.totalEngagement);
+          this.chartData = tags.map(tag => tag.avgEngagement);
         } else {
           console.warn('No tags returned from API.');
           this.chartLabels = [];
