@@ -8,7 +8,7 @@
             <button @click="gotoAnotherPage('/JavaTopic')">Topic frequency</button>
             <button @click="gotoAnotherPage('/UserEngagement')">User engagement</button>
             <button @click="gotoAnotherPage('/Errors')">Error Analysis</button>
-            <button>Answer quality</button>
+            <button @click="gotoAnotherPage('/AnswerQuality')">Answer quality</button>
         </div>
 
         <!-- <div class="menus">

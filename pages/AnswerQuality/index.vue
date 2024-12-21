@@ -3,41 +3,48 @@
 
     <h1>Answer Quality Analysis</h1>
 
+
         <!-- Loading Screen -->
         <div v-if="loading" class="loading-screen">
           <div class="spinner"></div>
         </div>
 
+    <div class="body">
+      <div class="btn-option">
+        <button class="original-data-btn">Original data</button>
+        <button class="scaled-data-btn">Scaled data</button>
+      </div>
+
+      <div class="charts">
+      
+        <div class="chart-container">
+            <Answer :chartData="normalizeScore" :chartLabels="normalizeReputation" :title="'Owner Reputation'" />
+        </div>
     
-    <div class="charts">
-      
-          <div class="chart-container">
-              <Answer :chartData="normalizeScore" :chartLabels="normalizeReputation" :title="'Owner Reputation'"/>
-          </div>
-      
-          <div class="chart-container">
-              <Answer :chartData="normalizeScore" :chartLabels="normalizeTime" :title="'Time Elapsed'"/>
-          </div>
-          
-          <div class="chart-container">
-            <Answer :chartData="normalizeScore" :chartLabels="normalizeLength" :title="'Answer Length'"/>
-          </div>
+        <div class="chart-container">
+            <Answer :chartData="normalizeScore" :chartLabels="normalizeTime" :title="'Time Elapsed'" />
+        </div>
+        
+        <div class="chart-container">
+          <Answer :chartData="normalizeScore" :chartLabels="normalizeLength" :title="'Answer Length'" />
+        </div>
+
+        <div class="input-container">
+          <label for="dataNumber">Enter the number of data points:</label>
+          <input
+             v-model="dataNumber"
+            id="dataNumber"
+             type="number"
+             min="1"
+             placeholder="Enter a number"
+           />
+           <button @click="analyzeData">Analyse</button>
+        </div>
+
     </div>
 
-    
+  </div>
 
-   <div class="input-container">
-       <label for="dataNumber">Enter the number of data points:</label>
-       <input
-          v-model="dataNumber"
-         id="dataNumber"
-          type="number"
-          min="1"
-          placeholder="Enter a number"
-        />
-        <button @click="analyzeData">Analyse</button>
-    </div>
-    
 </template>
   
 <script>
@@ -159,6 +166,12 @@ export default {
     box-sizing: border-box;
 }
 
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .charts {
   display: flex;
   flex-direction: column;
@@ -235,5 +248,36 @@ h1 {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .btn-option {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Align vertically */
+    gap: 20px; /* Space between buttons */
+    margin: 20px auto; /* Add spacing */
+    padding: 10px;
+  }
+  
+  /* Style for the buttons */
+  .btn-option button {
+    background-color: #4caf50; /* Green background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-option button:hover {
+    background-color: #388e3c; /* Darker green on hover */
+  }
+  
+  .btn-option button:active {
+    background-color: #2e7d32; /* Even darker green when clicked */
+  }
+
+
 </style>
   
