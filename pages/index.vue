@@ -3,7 +3,6 @@
       <AppHeader />
       <AppBanner />
       <router-view /> <!-- This renders the page content based on the current route -->
-      <Footer />
     </div>
   </template>
   
