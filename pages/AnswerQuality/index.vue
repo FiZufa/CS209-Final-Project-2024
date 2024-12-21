@@ -3,7 +3,6 @@
 
     <h1>Answer Quality Analysis</h1>
 
-
         <!-- Loading Screen -->
         <div v-if="loading" class="loading-screen">
           <div class="spinner"></div>
@@ -45,11 +44,14 @@
 
   </div>
 
+  <Footer />
+
 </template>
   
 <script>
 import AppHeader from '@/components/AppHeader.vue';
 import Answer from '@/components/Answer.vue';
+import Footer from '@/components/Footer.vue';
 import axios from 'axios';
 
 export default {
@@ -57,6 +59,7 @@ export default {
   components: {
     AppHeader,
     Answer,
+    Footer,
   },
   data() {
     return {

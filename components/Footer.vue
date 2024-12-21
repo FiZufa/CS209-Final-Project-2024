@@ -11,9 +11,9 @@
   .footer {
     text-align: center;
     padding: 30px;
-    background-color: orange;
-    color: #ccc;
-    margin-top: auto;
+    background-color: rgb(237, 191, 105);
+    color: #000;
+    margin-top: 50px;
   }
   </style>
   

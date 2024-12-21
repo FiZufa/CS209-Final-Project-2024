@@ -3,18 +3,21 @@
       <AppHeader />
       <AppBanner />
       <router-view /> <!-- This renders the page content based on the current route -->
+      <Footer />
     </div>
   </template>
   
   <script>
   import AppHeader from '@/components/AppHeader.vue';
   import AppBanner from '@/components/AppBanner.vue';
+  import Footer from '@/components/Footer.vue';
   
   export default {
     name: 'App',
     components: {
       AppHeader,
-      AppBanner
+      AppBanner,
+      Footer,
     }
   }
   </script>

@@ -23,12 +23,15 @@
         />
         <button @click="analyzeData">Analyse</button>
     </div>
+
+    <Footer />
     
 </template>
   
 <script>
 import AppHeader from '@/components/AppHeader.vue';
 import MyChart from '@/components/MyChart.vue';
+import Footer from '@/components/Footer.vue';
 import axios from 'axios';
 
 export default {
@@ -36,6 +39,7 @@ export default {
   components: {
     AppHeader,
     MyChart,
+    Footer
   },
   data() {
     return {

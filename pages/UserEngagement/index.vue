@@ -51,11 +51,12 @@
       <button @click="analyzeDataWithParameter">Analyse</button>
   </div> -->
 
-    
+  <Footer />
 </template>
   
 <script>
 import AppHeader from '@/components/AppHeader.vue';
+import Footer from '@/components/Footer.vue';
 import MyEngChart from '@/components/MyEngChart.vue';
 import MyDoughnut from '@/components/MyDoughnut.vue';
 import axios from 'axios';
@@ -66,6 +67,7 @@ export default {
     AppHeader,
     MyEngChart,
     MyDoughnut,
+    Footer,
   },
   data() {
     return {

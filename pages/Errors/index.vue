@@ -24,12 +24,15 @@
         <button @click="analyzeData">Analyse</button>
     </div>
     </div>
+
+    <Footer />
     
 </template>
   
 <script>
 import AppHeader from '@/components/AppHeader.vue';
 import MyErrorChart from '@/components/MyErrorChart.vue';
+import Footer from '@/components/Footer.vue';
 import axios from 'axios';
 
 export default {
@@ -37,6 +40,7 @@ export default {
   components: {
     AppHeader,
     MyErrorChart,
+    Footer,
   },
   data() {
     return {
