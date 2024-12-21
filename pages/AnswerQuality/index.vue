@@ -128,11 +128,6 @@ export default {
   this.normalizeReputation = normalize(this.ownerReputation);
   this.normalizeLength = normalize(this.answerLength);
   this.normalizeScore = normalize(this.upvote);
-
-  console.log('Normalized Time:', this.normalizeTime);
-  console.log('Normalized Reputation:', this.normalizeReputation);
-  console.log('Normalized Length:', this.normalizeLength);
-  console.log('Normalized Score:', this.normalizeScore);
 },
   resetData() {
     this.isAccepted = [];
@@ -220,7 +215,6 @@ h1 {
     background-color: #45a049;
   }
 
-  
   .loading-screen {
     position: fixed;
     top: 0;
@@ -260,22 +254,22 @@ h1 {
   
   /* Style for the buttons */
   .btn-option button {
-    background-color: #4caf50; /* Green background */
-    color: white; /* White text */
+    background-color: orange; 
+    color: rgb(65, 49, 19); 
     border: none;
     padding: 10px 20px;
     font-size: 1em;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s;
   }
   
   .btn-option button:hover {
-    background-color: #388e3c; /* Darker green on hover */
+    background-color: rgb(187, 131, 27); 
   }
   
   .btn-option button:active {
-    background-color: #2e7d32; /* Even darker green when clicked */
+    background-color: rgb(187, 131, 27); /* Even darker green when clicked */
   }
 
 
