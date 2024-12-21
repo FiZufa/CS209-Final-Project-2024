@@ -96,7 +96,7 @@ const initializeChart = () => {
 
   if (xValues.length === yValues.length) {
     const correlation = calculateCorrelation(xValues, yValues);
-    correlationText = `Correlation: r = ${correlation.toFixed(2)}`;
+    correlationText = `Correlation: r = ${correlation.toFixed(1)}`;
     console.log('Correlation Coefficient (r):', correlation);
   } else {
     console.warn('x and y arrays must have the same length.');
@@ -125,7 +125,7 @@ const initializeChart = () => {
     options: {
       responsive: true,
       plugins: {
-        legend: { display: true, position: 'top' },
+        legend: { display: false, position: 'top' },
         title: {
           display: true,
           text: `(${correlationText})`, // Include correlation in the title
@@ -175,6 +175,7 @@ onBeforeUnmount(() => {
   align-items: center; /* Center vertically */
   height: 80vh; /* Adjust the height as needed */
   width:100vh;
+  margin-bottom: 20px;
 }
 
 canvas {

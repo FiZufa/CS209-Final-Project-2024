@@ -61,9 +61,18 @@ const initializeChart = () => {
       responsive: true,
       indexAxis: 'y',
       plugins: {
-        legend: { display: true, position: 'top' },
+        legend: { display: false, position: 'top' },
       },
-      scales: { x: { beginAtZero: true } },
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: { display: true, text: 'Frequency' }, // Label for x-axis
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Java Topics' }, // Label for y-axis
+        },
+      },
     },
   });
 
