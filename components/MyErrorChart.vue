@@ -97,7 +97,7 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  height: 80vh; /* Adjust the height as needed */
+  height: 70vh; /* Adjust the height as needed */
   width:100vh;
 }
 

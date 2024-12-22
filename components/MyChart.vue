@@ -20,6 +20,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  ylabel: {
+    type: String,
+    required: true,
+  }
 });
 
 const chartCanvas = ref(null); // Reference to the canvas element
@@ -70,7 +74,7 @@ const initializeChart = () => {
         },
         y: {
           beginAtZero: true,
-          title: { display: true, text: 'Java Topics' }, // Label for y-axis
+          title: { display: true, text: props.ylabel }, // Label for y-axis
         },
       },
     },

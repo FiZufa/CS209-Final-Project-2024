@@ -9,7 +9,7 @@
 
     <div class="body">
       <div class="chart-container">
-        <MyErrorChart :chartData="chartData" :chartLabels="chartLabels" />
+        <MyChart :chartData="chartData" :chartLabels="chartLabels" :ylabel="'Error or Exception name'"/>
     </div>
 
     <div class="input-container">
@@ -33,6 +33,7 @@
 import AppHeader from '@/components/AppHeader.vue';
 import MyErrorChart from '@/components/MyErrorChart.vue';
 import Footer from '@/components/Footer.vue';
+import MyChart from '@/components/MyChart.vue';
 import axios from 'axios';
 
 export default {
@@ -40,6 +41,7 @@ export default {
   components: {
     AppHeader,
     MyErrorChart,
+    MyChart,
     Footer,
   },
   data() {

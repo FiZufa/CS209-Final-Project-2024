@@ -24,10 +24,10 @@
         <button @click="analyzeData">Analyse</button>
     </div>
 
-    <!-- <h1>Most Engaged Java Topics (with engagement parameter)</h1>
+    <h1>Most Engaged Java Topics (with user reputation parameter)</h1>
 
     <div class="chart-container">
-      <MyDoughnut :chartLabels="chartLabels2" :chartData="chartData2" />
+      <MyErrorChart :chartLabels="chartLabels2" :chartData="chartData2" />
     </div>
 
     <div class="input-container">
@@ -49,7 +49,7 @@
         placeholder="Enter a number"
       />
       <button @click="analyzeDataWithParameter">Analyse</button>
-  </div> -->
+  </div>
 
   <Footer />
 </template>
@@ -59,6 +59,7 @@ import AppHeader from '@/components/AppHeader.vue';
 import Footer from '@/components/Footer.vue';
 import MyEngChart from '@/components/MyEngChart.vue';
 import MyDoughnut from '@/components/MyDoughnut.vue';
+import MyErrorChart from '@/components/MyErrorChart.vue';
 import axios from 'axios';
 
 export default {
@@ -67,6 +68,7 @@ export default {
     AppHeader,
     MyEngChart,
     MyDoughnut,
+    MyErrorChart,
     Footer,
   },
   data() {
@@ -116,14 +118,14 @@ export default {
     async fetchTopTagsWithReputation(){
       this.loading = true;
       try {
-        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/top-engagement-tags-top-users/${this.topN || 10}/${this.reputation || 5000}`);
+        const response = await axios.get(`http://35.240.167.146:16800/api/v1/questions/top-engagement-tags-top-users/${this.topN || 10}/${this.reputation || 3000}`);
         const tags2 = response.data;
 
         if (tags2 && tags2.length) {
           console.log('Fetched tags2:', tags2);
           // Map the JSON data to labels and data arrays
           this.chartLabels2 = tags2.map(tag2 => tag2.name);
-          this.chartData2 = tags2.map(tag2 => tag2.totalEngagement);
+          this.chartData2 = tags2.map(tag2 => tag2.avgEngagement);
 
         } else {
           console.warn('No tags2 returned from API.');
@@ -181,8 +183,8 @@ export default {
 h1 {
     text-align: center;
     margin-bottom: 20px; /* Add spacing below the header */
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 30px;
 }
 
 .input-container {

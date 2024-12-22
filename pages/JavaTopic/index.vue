@@ -9,7 +9,7 @@
         </div>
 
     <div class="chart-container">
-      <MyChart :chartData="chartData" :chartLabels="chartLabels" />
+      <MyChart :chartData="chartData" :chartLabels="chartLabels" :ylabel="'Java Topic'" />
     </div>
 
    <div class="input-container">

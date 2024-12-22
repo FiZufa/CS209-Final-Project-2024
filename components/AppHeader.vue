@@ -41,8 +41,14 @@
         </div>
 
         <!-- Results Section -->
-        <div v-if="searchResults" class="results-box">
-          <p>Frequency for "<span class="span-term">{{ searchTerm }}</span>" is <span class="span-result">{{ searchResults }}</span></p>
+        <div v-if="searchResults !== null && searchResults > 0" class="results-box">
+          <p>
+            Frequency for "<span class="span-term">{{ searchTerm }}</span>" is 
+            <span class="span-result">{{ searchResults }}</span>
+          </p>
+        </div>
+        <div v-else-if="searchResults === 0">
+          <p>Keyword is not found</p>
         </div>
 
         <button class="close-btn" @click="closePopup">close</button>
@@ -97,7 +103,7 @@ const searchJavaTopic = async () => {
     const response = await axios.get(endpoint);
     console.log('Search Java Topic Response:', response.data);
 
-    searchResults.value = response.data;
+    searchResults.value = Number(response.data) || 0;
 
     //alert(`Frequency for "${searchTerm.value}": ${response.data}`);
   } catch (error) {
@@ -121,7 +127,8 @@ const searchException = async () => {
     const response = await axios.get(endpoint);
     console.log('Search Error or Exception Response:', response.data);
 
-    searchResults.value = response.data.frequency;
+    searchResults.value = Number(response.data.frequency) || 0;
+    
   } catch (error) {
     console.error('Error fetching exception data:', error);
     alert('An error occurred while fetching data. Please try again.');
