@@ -10,24 +10,46 @@
 
     <div class="body">
       <div class="btn-option">
-        <button class="original-data-btn">Original data</button>
-        <button class="scaled-data-btn">Scaled data</button>
+        <button 
+          :class="{'active-btn': !isNormalized}" 
+          @click="showOriginalData"
+        >
+          Original Data
+        </button>
+        <button 
+          :class="{'active-btn': isNormalized}" 
+          @click="showNormalizedData"
+        >
+          Scaled Data
+        </button>
       </div>
 
       <div class="charts">
       
         <div class="chart-container">
-            <Answer :chartData="normalizeScore" :chartLabels="normalizeReputation" :title="'Owner Reputation'" />
-        </div>
-    
-        <div class="chart-container">
-            <Answer :chartData="normalizeScore" :chartLabels="normalizeTime" :title="'Time Elapsed'" />
+          <Answer 
+            :chartData="isNormalized ? normalizeScore : upvote" 
+            :chartLabels="isNormalized ? normalizeReputation : ownerReputation" 
+            :title="'Owner Reputation'" 
+          />
         </div>
         
         <div class="chart-container">
-          <Answer :chartData="normalizeScore" :chartLabels="normalizeLength" :title="'Answer Length'" />
+          <Answer 
+            :chartData="isNormalized ? normalizeScore : upvote" 
+            :chartLabels="isNormalized ? normalizeTime : timeElapsed" 
+            :title="'Time Elapsed'" 
+          />
         </div>
-
+        
+        <div class="chart-container">
+          <Answer 
+            :chartData="isNormalized ? normalizeScore : upvote" 
+            :chartLabels="isNormalized ? normalizeLength : answerLength" 
+            :title="'Answer Length'" 
+          />
+        </div>
+        
         <div class="input-container">
           <label for="dataNumber">Enter the number of data points:</label>
           <input
@@ -73,6 +95,7 @@ export default {
       normalizeLength: [],
       normalizeScore: [],
       dataNumber: null,
+      isNormalized: false, // Track if data is normalized or original
       loading: false,
 
     };
@@ -94,7 +117,8 @@ export default {
         this.upvote = tags.map(tag => tag.score);
         this.answerLength = tags.map(tag => tag.answerLength);
 
-        this.normalizeData();
+        //this.normalizeData();
+
       } else {
         console.warn('No tags returned from API.');
         this.resetData();
@@ -141,15 +165,26 @@ export default {
     this.normalizeTime = [];
     this.normalizeReputation = [];
     this.normalizeLength = [];
+    
   },
   analyzeData() {
       if (this.dataNumber && this.dataNumber > 0) {
         // Fetch tags based on the number input by the user
         this.fetchAnswerData();
+        this.isNormalized = false;
       } else {
         alert('Please enter a valid number greater than 0');
       }
-    },
+  },
+  showOriginalData() {
+      this.isNormalized = false;
+      this.fetchAnswerData();
+  },
+
+  showNormalizedData() {
+    this.isNormalized = true;
+    this.normalizeData();
+  }
 }
 
 };
@@ -257,9 +292,9 @@ h1 {
   
   /* Style for the buttons */
   .btn-option button {
-    background-color: orange; 
+    background-color: #fff; 
     color: rgb(65, 49, 19); 
-    border: none;
+    border: 1px solid rgb(187, 131, 27);
     padding: 10px 20px;
     font-size: 1em;
     border-radius: 25px;
@@ -274,6 +309,20 @@ h1 {
   .btn-option button:active {
     background-color: rgb(187, 131, 27); /* Even darker green when clicked */
   }
+
+  .btn-option {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px auto;
+  }
+  
+  .btn-option button.active-btn {
+    background-color: rgb(187, 131, 27);
+    color: white;
+  }
+  
+  
 
 
 </style>
