@@ -1,5 +1,7 @@
 # Stackoverflow Data Analysis
-This is the project for Computer Design and Application (CS209) Fall 2024 taught by Prof. Tao Yida at SUSTech.  This project uses **Spring Boot** (visit [this github repository](https://github.com/sreyny-dev/java2-final-project/) for the Spring Boot implementation) to develop a web application that stores, analyzes, and visualizes Stack Overflow Q&A data w.r.t. java programming, with the purpose of understanding the common questions, answers, and resolution activities associated with Java programming
+This is the project for Computer Design and Application (CS209) Fall 2024 taught by Prof. Tao Yida at SUSTech.  This project uses **Spring Boot** (visit [this github repository](https://github.com/sreyny-dev/java2-final-project/) for the Spring Boot implementation) to develop a web application that stores, analyzes, and visualizes Stack Overflow Q&A data w.r.t. java programming, with the purpose of understanding the common questions, answers, and resolution activities associated with Java programming.
+
+![homepage](imgs/0_homepage(1).png)
 
 ## Data Collection
 - Use the Stack [Overflow API](https://api.stackexchange.com/docs) to collect at least 1000 Java-tagged threads.
@@ -11,25 +13,66 @@ analysis can access data from the local source.
 1. **Java Topic Analysis**
 The top N  topics that are most frequently asked on Stackoverflow.
 
-![Java Topic Analysis](1_freq_ask_topic.png)
+![Java Topic Analysis](imgs/1_freq_ask_topic.png)
 
 2. **User Engagement**
 The top N topics that have the most engagement from users with higher reputation scores.
 
 The user engagement score is defined using following metric:
 
-`User Engagement Score` = 0.4 x `Number of Upvotes` + 0.4 x `Number of Views` + 0.1 x `User Reputation` + 0.4 x `Number of Answers` 
+`User Engagement Score` = 0.3 * `|Number of Upvotes|` + 0.3 x `|Number of Views|` + 0.05 x `|User Reputation|` + 0.3 x `|Number of Answers|` 
 
-![User engagement](2_most_engaged_topic.png)
+![User engagement](imgs/2_most_engaged_topic.png)
 
 3. **Common Mistakes**
 The top N errors and exceptions that are frequently discussed by Java developers.
 
-The high level errors and exceptions are as following
-- NullPointer
-- jjj
+The high level exceptions are as following: 
 
-![Common mistake](3_most_discussed_errors.png)
+            "CassNotFoundException"
+            "CloneNotSupportedException",
+            "IllegalAccessException",
+            "InstantiationException",
+            "InterruptedException",
+            "NoSuchFieldException",
+            "NoSuchMethodException",
+            "ArithmeticException",
+            "ArrayStoreException",
+            "ClassCastException",
+            "IllegalArgumentException",
+            "IllegalMonitorStateException",
+            "IllegalStateException",
+            "IndexOutOfBoundsException",
+            "NegativeArraySizeException",
+            "NullPointerException",
+            "SecurityException",
+            "UnsupportedOperationException",
+            "ArrayIndexOutOfBoundsException",
+            "StringIndexOutOfBounds",
+            "NumberFormatException"
+
+while The high level errors are as following:
+
+            "AssertionError",
+            "ClassCircularityError",
+            "ClassFormatError",
+            "ExceptionInInitializerError",
+            "IncompatibleClassChangeError",
+            "NoClassDefFoundError",
+            "UnsatisfiedLinkError",
+            "VerifyError",
+            "InternalError",
+            "OutOfMemoryError",
+            "StackOverflowError",
+            "UnknownError",
+            "AbstractMethodError",
+            "IllegalAccessError",
+            "InstantiationError",
+            "NoSuchFieldError",
+            "NoSuchMethodError"
+
+
+![Common mistake](imgs/3_most_discussed_errors.png)
 
 4. **Answer Quality**
 Analyse the factor that contribute to high-quality answers, which is defined by the Number of Upvotes and whether the answer is accepted.
@@ -39,14 +82,14 @@ The factors are as follow:
 - The reputation of the user that creates the answer.
 - The length of the answer.
 
-![quality analysis](4_quality_analysis.png)
+![quality analysis](imgs/4_quality_analysis.png)
 
 ## RESTful API Service
 The application also provides a REST service that answers the following two questions, so that users may use RESTful APIs to GET the answers they want. The required REST services include:
 - Topic frequency: users could query for the frequency of a specific topic. Users could also query for the top N topics sorted by frequency.
 - Bug frequency: users could query for the frequency of a specific error or exception. Users could also query for the top N errors or exceptions sorted by frequency.
 
-![rest api](5_restapi.png)
+![rest api](imgs/5_restapi(1).png)
 
 ### Setup
 
